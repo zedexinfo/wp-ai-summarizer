@@ -1,0 +1,22 @@
+.ftpquota
+.tmb.zip
+error_log
+license.txt
+readme.html
+wp-content/uploads
+wp-content/upgrade
+wp-content/languages
+wp-content/debug.log
+.idea/
+# Package files
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+*.xml
+# Log file
+*.log
+.user.ini1
+wp-content/plugins/all-in-one-wp-migration/
