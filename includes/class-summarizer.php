@@ -142,7 +142,7 @@ if ( ! class_exists( "Summarizer" ) ) {
 
 			$product = get_post($comment->comment_post_ID);
 			if ( ! wp_next_scheduled( 'ai_cron_hook' ) ) {
-				wp_schedule_single_event(time() + 20, 'ai_cron_hook', ['product_id' => $product->ID]);
+				wp_schedule_single_event(time() + 300, 'ai_cron_hook', ['product_id' => $product->ID]);
 			}
 		}
 
