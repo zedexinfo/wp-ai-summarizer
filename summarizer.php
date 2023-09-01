@@ -24,4 +24,6 @@ function summarizer_init(): Summarizer
 	return Summarizer::getInstance();
 }
 
+register_activation_hook(__FILE__, [Summarizer::class, 'defaultValues']);
+
 summarizer_init();

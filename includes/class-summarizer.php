@@ -44,6 +44,18 @@ if ( ! class_exists( "Summarizer" ) ) {
 			$this->SummarizerAdminMenu = SummarizerAdminMenu::getInstance();
 		}
 
+		public static function defaultValues(){
+			$default_values = [
+				'cron_delay_time_option' => 300
+			];
+
+			foreach ($default_values as $key => $value){
+				if (get_option($key) == false) {
+					update_option($key, $value);
+				}
+			}
+		}
+
 		public function fetch_reviews($product_id) {
 			$args = array(
 				'status' => 'approve',
@@ -71,7 +83,7 @@ if ( ! class_exists( "Summarizer" ) ) {
 			else {
 				$comments = 'No reviews found.';
 			}
-			$summary = $this->summarizer( "summarize the following reviews -" . $comments );
+			$summary = $this->summarizer( "summarize the following reviews - " . $comments );
 			return $summary;
 		}
 
@@ -142,7 +154,7 @@ if ( ! class_exists( "Summarizer" ) ) {
 
 			$product = get_post($comment->comment_post_ID);
 			if ( ! wp_next_scheduled( 'ai_cron_hook' ) ) {
-				wp_schedule_single_event(time() + 300, 'ai_cron_hook', ['product_id' => $product->ID]);
+				wp_schedule_single_event(time() + get_option('cron_delay_time_option'), 'ai_cron_hook', ['product_id' => $product->ID]);
 			}
 		}
 
