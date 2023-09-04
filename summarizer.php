@@ -1,0 +1,31 @@
+<?php
+/*
+  * Plugin Name: WP AI Summarizer
+  * Description: The WP AI Summarizer Plugin is a powerful tool that leverages OpenAI to summarize post content and product reviews on your WordPress website. It provides an easy way to generate concise summaries of your content and display them in a meta box in the admin panel.
+  * Version: 1.0.0
+  * Author: Dev@Zedex
+  * Author URI: https://zedexinfo.com/
+  * License: GPL v2 or later
+*/
+
+if (!defined('ABSPATH')){ die(); }
+
+if (!defined('SUMMARIZER_PLUGIN_DIR')){
+	define('SUMMARIZER_PLUGIN_DIR',untrailingslashit( plugin_dir_path( __FILE__ )));
+	define('SUMMARIZER_INCLUDES_PATH',untrailingslashit( plugin_dir_path( __FILE__ ) ) . '/includes/');
+	define('SUMMARIZER_TEMPLATES_PATH',untrailingslashit( plugin_dir_path( __FILE__ ) ) . '/templates/');
+	define('OPENAI_API_ENDPOINT', 'https://api.openai.com/v1/engines/text-davinci-002/completions');
+}
+
+if ( ! class_exists( 'Summarizer' ) ) {
+	include_once SUMMARIZER_INCLUDES_PATH . "class-summarizer.php";
+}
+
+function summarizer_init(): Summarizer
+{
+	return Summarizer::getInstance();
+}
+
+register_activation_hook(__FILE__, [Summarizer::class, 'defaultValues']);
+
+summarizer_init();
