@@ -11,7 +11,7 @@ if ( ! class_exists( "Summarizer" ) ) {
 
 		public function __construct()
 		{
-			$this->apiKey = get_option('api_key_option');
+			$this->apiKey = get_option('sm_api_key_option');
 
 			add_action('plugins_loaded', array($this, 'initialize'));
 			add_action( 'add_meta_boxes', [$this, 'summarize_meta_box'] );
@@ -46,7 +46,8 @@ if ( ! class_exists( "Summarizer" ) ) {
 
 		public static function defaultValues(){
 			$default_values = [
-				'cron_delay_time_option' => 300
+				'sm_cron_delay_time_option' => 300,
+				'sm_error_log_option' => 1
 			];
 
 			foreach ($default_values as $key => $value){
@@ -107,8 +108,8 @@ if ( ! class_exists( "Summarizer" ) ) {
 			$body     = wp_remote_retrieve_body( $response );
 			$result   = json_decode( $body, true );
 
-			if (isset($result['error'])) {
-				$summary = 'error';
+			if (isset($result['error']['message'])) {
+				$summary['error'] = $result['error']['message'];
 			}
 			else {
 				$summary = $result['choices'][0]['text'];
@@ -121,20 +122,32 @@ if ( ! class_exists( "Summarizer" ) ) {
 
 			if ($post->post_type == 'post') {
 				$content = $post->post_content;
-				$summary = $this->summarizer( "Please summarize the following text: " . $content );
-				if (empty($content) || empty($summary)){
-					echo $err_label[0];
+				if (empty($content)){
+					echo '<p style="color: red">Content is Empty!</p>';
 				}
 				else {
-					echo '<p>' . $summary . '</p>';
+					$summary = $this->summarizer( "Please summarize the following text: " . $content );
+					if (isset($summary['error'])) {
+						echo '<p style="color: red">' . $summary['error'] . '</p>';
+					}
+					else {
+						echo '<p>' . $summary . '</p>';
+					}
 				}
 			}
 			else {
-				$summary = get_post_meta( $post->ID, '_reviews_summary', true);
-				if (empty($summary)) {
-					echo $err_label[0];
-				} else {
-					echo '<p>' . $summary . '</p>';
+				$sm_error = get_post_meta( $post->ID, '_reviews_summary_error', true);
+				if (!empty($sm_error)) {
+					echo '<p style="color: red">' . $sm_error . '</p>';
+				}
+				else {
+					$summary = get_post_meta( $post->ID, '_reviews_summary', true);
+					if (empty($summary)) {
+						echo '<p style="color: red">' . $err_label[1] . '</p>';
+					}
+					else {
+						echo '<p>' . $summary . '</p>';
+					}
 				}
 			}
 		}
@@ -154,7 +167,7 @@ if ( ! class_exists( "Summarizer" ) ) {
 
 			$product = get_post($comment->comment_post_ID);
 			if ( ! wp_next_scheduled( 'ai_cron_hook' ) ) {
-				wp_schedule_single_event(time() + get_option('cron_delay_time_option'), 'ai_cron_hook', ['product_id' => $product->ID]);
+				wp_schedule_single_event(time() + get_option('sm_cron_delay_time_option'), 'ai_cron_hook', ['product_id' => $product->ID]);
 			}
 		}
 
@@ -164,8 +177,15 @@ if ( ! class_exists( "Summarizer" ) ) {
 			if ($product && $product->post_type === 'product') {
 				if ($product->comment_count > 0) {
 					$summary = $this->fetch_reviews($product);
-					if (!empty($summary) && $summary != 'error') {
+					if (isset($summary['error'])) {
+						if (get_option('sm_error_log_option') == 1) {
+							summarizer_log( $product->ID, $product->post_title, $summary['error'] );
+						}
+						update_post_meta($product->ID, '_reviews_summary_error', $summary['error']);
+					}
+					else {
 						update_post_meta($product->ID, '_reviews_summary', $summary);
+						delete_post_meta($product->ID, '_reviews_summary_error');
 					}
 				}
 			}
