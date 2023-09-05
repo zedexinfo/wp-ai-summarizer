@@ -27,6 +27,7 @@ The plugin provides the following configuration options in the admin settings:
 
 - OpenAI API Key: Enter your OpenAI API key to enable summarization.
 - CRON delay time (default: 300 seconds): Set the delay time of the CRON.
+- Error Log (default: on): Enable this option to view the error log.
 
 == Frequently Asked Questions ==
 
