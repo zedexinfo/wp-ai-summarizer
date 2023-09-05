@@ -28,8 +28,21 @@ if ( ! class_exists( "SummarizerAdminMenu" ) ) {
 				[$this, "summarizer_settings_template"]
 			);
 
+			add_submenu_page(
+				"manage_sm",
+				"Error Log",
+				"View Error Log",
+				"manage_options",
+				"manage_sm_error_log",
+				[$this, "error_log_template"]
+			);
+
 			add_action( 'admin_init', [$this, 'register_summarizer_settings'] );
 		}
+
+        public function error_log_template() {
+            load_template(SUMMARIZER_TEMPLATES_PATH . 'view-error-log.php');
+        }
 
 		public function summarizer_settings_template() {
 			settings_errors();
@@ -48,7 +61,7 @@ if ( ! class_exists( "SummarizerAdminMenu" ) ) {
 
         public function api_key_field_validation($value) {
             if (empty($value)) {
-                $value = get_option('api_key_option');
+                $value = get_option('sm_api_key_option');
                 add_settings_error('summarizer-setting-section', 'summarizer-setting-section_error', 'Please enter API Key', 'error');
             }
             return $value;
@@ -56,7 +69,7 @@ if ( ! class_exists( "SummarizerAdminMenu" ) ) {
 
         public function cron_delay_time_field_validation($value) {
             if (empty($value)) {
-                $value = get_option('cron_delay_time_option');
+                $value = get_option('sm_cron_delay_time_option');
                 add_settings_error('summarizer-setting-section', 'summarizer-setting-section_error', 'Please enter Cron Delay Time', 'error');
             }
             return $value;
@@ -64,7 +77,7 @@ if ( ! class_exists( "SummarizerAdminMenu" ) ) {
 
 		public function register_summarizer_settings() {
             $admin_menu = [
-                'api_key_option' => [
+                'sm_api_key_option' => [
                     'id' => 'api_key',
                     'title' => 'Enter API Key',
                     'callback' => 'api_key_callback',
@@ -72,14 +85,21 @@ if ( ! class_exists( "SummarizerAdminMenu" ) ) {
                     'section' => 'summarizer_admin_setting_section',
                     'validation callback' => 'api_key_field_validation'
                 ],
-                'cron_delay_time_option' => [
+                'sm_cron_delay_time_option' => [
                     'id' => 'cron_delay_time',
                     'title' => 'Enter Cron Delay Time (in seconds)',
                     'callback' => 'cron_delay_time_callback',
                     'page' => 'summarizer-setting-section',
                     'section' => 'summarizer_admin_setting_section',
                     'validation callback' => 'cron_delay_time_field_validation'
-                ]
+                ],
+                'sm_error_log_option' => array(
+	                'id' => 'sm_error_log',
+	                'title' => 'Error Log',
+	                'callback' => 'sm_error_log_callback',
+	                'page' => 'summarizer-setting-section',
+	                'section' => 'summarizer_admin_setting_section'
+                )
             ];
 
 			add_settings_section(
@@ -102,19 +122,26 @@ if ( ! class_exists( "SummarizerAdminMenu" ) ) {
 		}
 
 		public function api_key_callback() {
-			$api_key = get_option( 'api_key_option' );
+			$api_key = get_option( 'sm_api_key_option' );
 			?>
-            <input type="text" name="api_key_option" class="regular-text"
+            <input type="text" name="sm_api_key_option" class="regular-text"
                    value="<?php echo isset( $api_key ) ? esc_attr( $api_key ) : ''; ?>">
 			<?php
 		}
 
         public function cron_delay_time_callback() {
-            $cron_delay_time = get_option( 'cron_delay_time_option' );
+            $cron_delay_time = get_option( 'sm_cron_delay_time_option' );
             ?>
-            <input type="text" name="cron_delay_time_option" class="regular-text"
+            <input type="text" name="sm_cron_delay_time_option" class="regular-text"
                    value="<?php echo isset( $cron_delay_time ) ? esc_attr( $cron_delay_time ) : ''; ?>">
             <?php
         }
+
+		public function sm_error_log_callback() {
+			$error_log = get_option('sm_error_log_option');
+			?>
+            <input type="checkbox" name="sm_error_log_option" value="1" <?php checked( '1', $error_log ); ?> />
+			<?php
+		}
 	}
 }
