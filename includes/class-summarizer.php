@@ -13,6 +13,7 @@ if ( ! class_exists( "Summarizer" ) ) {
 		{
 			$this->apiKey = get_option('sm_api_key_option');
 
+            		add_filter('plugin_row_meta', [$this, 'plugin_row_meta'], 10, 2);
 			add_action('plugins_loaded', array($this, 'initialize'));
 			add_action( 'add_meta_boxes', [$this, 'summarize_meta_box'] );
 			add_action( 'comment_post', [$this, 'schedule_ai_cron'] );
@@ -29,6 +30,16 @@ if ( ! class_exists( "Summarizer" ) ) {
 
 			return self::$instance;
 		}
+
+	        public function plugin_row_meta($links, $file) {
+	            if (strpos($file, 'wp-ai-summarizer-main.php') !== false) {
+	                $new_links = array(
+	                    'support' => '<a href="https://zedexinfo.com/contact-us/" target="_blank">Support</a>',
+	                );
+	                $links = array_merge($links, $new_links);
+	            }
+	            return $links;
+	        }
 
 		public function initialize()
 		{
