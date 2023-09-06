@@ -16,6 +16,8 @@ if ( ! class_exists( "Summarizer" ) ) {
 			add_action('plugins_loaded', array($this, 'initialize'));
 			add_action( 'add_meta_boxes', [$this, 'summarize_meta_box'] );
 			add_action( 'comment_post', [$this, 'schedule_ai_cron'] );
+			add_action('edit_comment', [$this, 'schedule_ai_cron']);
+			add_action('trash_comment', [$this, 'schedule_ai_cron']);
 			add_action('ai_cron_hook', [$this, 'ai_cron_hook']);
 		}
 
@@ -157,7 +159,7 @@ if ( ! class_exists( "Summarizer" ) ) {
 			if ($post == 'post') {
 				add_meta_box('summarize', $label[0], [$this, 'display_summary'], $post, 'normal', 'high');
 			}
-			else {
+			elseif ($post == 'product') {
 				add_meta_box('summarize', $label[1], [$this, 'display_summary'], $post, 'normal', 'high');
 			}
 		}
