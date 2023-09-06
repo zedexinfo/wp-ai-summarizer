@@ -32,7 +32,7 @@ if ( ! class_exists( "Summarizer" ) ) {
 		}
 
 	        public function plugin_row_meta($links, $file) {
-	            if (strpos($file, 'wp-ai-summarizer-main.php') !== false) {
+	            if ('wp-ai-summarizer-main/summarizer.php' === $file) {
 	                $new_links = array(
 	                    'support' => '<a href="https://zedexinfo.com/contact-us/" target="_blank">Support</a>',
 	                );
