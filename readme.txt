@@ -1,4 +1,4 @@
-=== WP AI Summarizer Plugin ===
+=== ZX AI Summarizer Plugin ===
 
 Contributors: zedexwpdev
 Tags: summarizer, openai, content, reviews
@@ -11,7 +11,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-The WP AI Summarizer Plugin is a powerful tool that leverages OpenAI to summarize post content and product reviews on your WordPress website. It provides an easy way to generate concise summaries of your content and display them in a meta box in the admin panel. Whether you want to summarize blog posts or product reviews, this plugin has you covered.
+The ZX AI Summarizer Plugin is a powerful tool that leverages OpenAI to summarize post content and product reviews on your WordPress website. It provides an easy way to generate concise summaries of your content and display them in a meta box in the admin panel. Whether you want to summarize blog posts or product reviews, this plugin has you covered.
 
 https://api.openai.com/v1/engines/text-davinci-002/completions - this is the OPENAI API endpoint used by the plugin to generate summaries.
 
@@ -48,4 +48,4 @@ A: Yes, you must provide your OpenAI API key in the settings to enable summariza
 == Upgrade Notice ==
 
 = 1.0.0 =
-Initial release of the WP AI Summarizer Plugin - This plugin is tested up to WordPress version 6.3.
+Initial release of the ZX AI Summarizer Plugin - This plugin is tested up to WordPress version 6.3.
