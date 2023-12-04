@@ -136,30 +136,30 @@ if ( ! class_exists( "Summarizer" ) ) {
 			if ($post->post_type == 'post') {
 				$content = $post->post_content;
 				if (empty($content)){
-					echo '<p style="color: red">Content is Empty!</p>';
+					echo '<p style="color: red">' . esc_html('Content is Empty!') . '</p>';
 				}
 				else {
 					$summary = $this->summarizer( "Please summarize the following text: " . $content );
 					if (isset($summary['error'])) {
-						echo '<p style="color: red">' . $summary['error'] . '</p>';
+						echo '<p style="color: red">' . esc_html($summary['error']) . '</p>';
 					}
 					else {
-						echo '<p>' . $summary . '</p>';
+						echo '<p>' . esc_html($summary) . '</p>';
 					}
 				}
 			}
 			else {
 				$sm_error = get_post_meta( $post->ID, '_reviews_summary_error', true);
 				if (!empty($sm_error)) {
-					echo '<p style="color: red">' . $sm_error . '</p>';
+					echo '<p style="color: red">' . esc_html($sm_error) . '</p>';
 				}
 				else {
 					$summary = get_post_meta( $post->ID, '_reviews_summary', true);
 					if (empty($summary)) {
-						echo '<p style="color: red">' . $err_label[1] . '</p>';
+						echo '<p style="color: red">' . esc_html($err_label[1]) . '</p>';
 					}
 					else {
-						echo '<p>' . $summary . '</p>';
+						echo '<p>' . esc_html($summary) . '</p>';
 					}
 				}
 			}

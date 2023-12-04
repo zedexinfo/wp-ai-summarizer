@@ -3,6 +3,8 @@
   * Plugin Name: ZX AI Summarizer
   * Description: The ZX AI Summarizer Plugin is a powerful tool that leverages OpenAI to summarize post content and product reviews on your WordPress website. It provides an easy way to generate concise summaries of your content and display them in a meta box in the admin panel.
   * Version: 1.0.0
+  * Requires at least: 5.2
+  * Requires PHP: 7.0
   * Author: wpdev@zedexinfo.com
   * Contact Email: wpdev@zedexinfo.com
   * Author URI: https://zedexinfo.com/
