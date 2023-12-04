@@ -3,6 +3,8 @@
   * Plugin Name: WP AI Summarizer
   * Description: The WP AI Summarizer Plugin is a powerful tool that leverages OpenAI to summarize post content and product reviews on your WordPress website. It provides an easy way to generate concise summaries of your content and display them in a meta box in the admin panel.
   * Version: 1.0.0
+  * Requires at least: 5.2
+  * Requires PHP: 7.0
   * Author: Dev@Zedex
   * Author URI: https://zedexinfo.com/
   * License: GPL v2 or later
